@@ -1,12 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Hangfire;
 using Microsoft.Bot.Builder.Dialogs;
 
 namespace bot.ait.codes.Commands
 {
-    public class UpdateCommand : BaseCommand
+    public class UpdateCommandHandler : BaseCommandHandler
     {
-        public UpdateCommand() : base(Command.Update)
+        public UpdateCommandHandler() : base(Command.Update)
         {
         }
 

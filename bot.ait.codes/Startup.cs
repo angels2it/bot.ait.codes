@@ -1,11 +1,10 @@
-﻿using System.Web.Http;
-using System.Web.Mvc;
-using Autofac;
-using Autofac.Integration.Mvc;
+﻿using Autofac;
 using Autofac.Integration.WebApi;
 using bot.ait.codes;
+using Hangfire;
 using Microsoft.Owin;
 using Owin;
+using GlobalConfiguration = System.Web.Http.GlobalConfiguration;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace bot.ait.codes
@@ -18,8 +17,14 @@ namespace bot.ait.codes
             builder.RegisterApiControllers(typeof(WebApiApplication).Assembly);
             AutofacBootstrap.Init(builder);
             var container = builder.Build();
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+
+            Hangfire.GlobalConfiguration.Configuration.UseAutofacActivator(container);
+            Hangfire.GlobalConfiguration.Configuration.UseSqlServerStorage("hangfire");
+            app.UseHangfireServer();
+            app.UseHangfireDashboard();
+
+            RecurringJob.AddOrUpdate<BotJob>(job => job.Run(), () => Cron.MinuteInterval(10));
         }
     }
 }

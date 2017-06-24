@@ -1,11 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 
 namespace bot.ait.codes.Commands
 {
-    public class UpdateGroupCommand : BaseCommand
+    [Serializable]
+
+    public class UpdateGroupCommandHandler : BaseCommandHandler
     {
-        public UpdateGroupCommand() : base(Command.UpdateGroup)
+        public UpdateGroupCommandHandler() : base(Command.UpdateGroup)
         {
         }
 

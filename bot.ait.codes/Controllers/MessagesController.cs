@@ -12,6 +12,7 @@ namespace bot.ait.codes.Controllers
     public class MessagesController : ApiController
     {
         private readonly RootDialog _rootDialog;
+
         public MessagesController(RootDialog rootDialog)
         {
             _rootDialog = rootDialog;

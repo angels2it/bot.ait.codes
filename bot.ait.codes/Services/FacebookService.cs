@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using RestSharp;
@@ -11,9 +12,9 @@ namespace bot.ait.codes.Services
         private readonly string _token;
         readonly RestClient _client = new RestClient("https://graph.facebook.com/");
         private readonly DataService _dataService;
-        public FacebookService(string token, DataService dataService)
+        public FacebookService(DataService dataService)
         {
-            _token = token;
+            _token = ConfigurationManager.AppSettings["FbAccessToken"];
             _dataService = dataService;
         }
         public async Task<List<string>> GetLatestPhotoAsync(string groupId)
@@ -21,7 +22,7 @@ namespace bot.ait.codes.Services
             var request = new RestRequest($"{groupId}/posts?fields=id,status_type&limit=10&access_token={_token}");
             var result = await _client.ExecuteGetTaskAsync<RootObject>(request);
             if (result?.Data == null || result.Data.Data.Count == 0)
-                return null;
+                return new List<string>();
             var latestId = await _dataService.GetLatestId(groupId);
             PostData post;
             if (string.IsNullOrEmpty(latestId))

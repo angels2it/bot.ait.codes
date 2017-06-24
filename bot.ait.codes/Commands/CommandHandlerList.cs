@@ -8,20 +8,18 @@ using Newtonsoft.Json.Linq;
 
 namespace bot.ait.codes.Commands
 {
-    public class CommandList : List<ICommandHandler>
+    public class CommandHandlerList : List<ICommandHandler>
     {
-        static AIConfiguration config = new AIConfiguration("ca83e0ee08054e6c87e06883fdcad740", SupportedLanguage.English);
-        static ApiAi apiAi = new ApiAi(config);
         public async Task Process(IDialogContext bot, string channel, string message)
         {
             var messageText = Helpers.GetMessage(message);
             string command = messageText.Split(' ')[0].ToLower().Trim();
-            var processer = this.FirstOrDefault(e => e.Command.ToString().ToLower() == command);
-            if (processer != null)
+            var handler = this.FirstOrDefault(e => e.Command.ToString().ToLower() == command);
+            if (handler != null)
             {
                 try
                 {
-                    await processer.Handle(bot, messageText);
+                    await handler.Handle(bot, messageText);
                 }
                 catch (Exception e)
                 {
@@ -59,5 +57,8 @@ namespace bot.ait.codes.Commands
                 }
             }
         }
+
+        static readonly AIConfiguration config = new AIConfiguration("ca83e0ee08054e6c87e06883fdcad740", SupportedLanguage.English);
+        static readonly ApiAi apiAi = new ApiAi(config);
     }
 }

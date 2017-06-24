@@ -1,13 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using bot.ait.codes.Services;
 using Microsoft.Bot.Builder.Dialogs;
 
 namespace bot.ait.codes.Commands
 {
-    public class StartCommand : BaseCommand
+    public class StartCommandHandler : BaseCommandHandler
     {
         private readonly DataService _dataService;
-        public StartCommand(DataService dataService) : base(Command.Start)
+        public StartCommandHandler(DataService dataService) : base(Command.Start)
         {
             _dataService = dataService;
         }
